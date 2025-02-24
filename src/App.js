@@ -1,8 +1,9 @@
 import { useState } from "react";
+import "./styles.css";
 
 
 function App() {
-  const [length, setLength] = useState(50);
+  const [length, setLength] = useState(8);
   const [numbers, setNumbers] = useState(false);
   const [symbols, setSymbols] = useState(false);
   const [password, setPassword] = useState("");
