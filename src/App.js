@@ -23,7 +23,7 @@ function App() {
     setError('');
 
     try {
-      const response = await axios.get('https://passwordgenerator-backend-production.up.railway.app/generate-password', {
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/generate-password`, {
         params: {
           length: length,
           numbers: includeNumbers,
