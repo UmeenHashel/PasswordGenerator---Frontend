@@ -24,7 +24,7 @@ function App() {
     setError(''); // Clear any previous errors
 
     try {
-      const response = await axios.get('http://127.0.0.1:5000/generate-password', {
+      const response = await axios.get('https://passwordgenerator-backend-production.up.railway.app/generate-password', {
         params: {
           length: length,
           numbers: includeNumbers,
