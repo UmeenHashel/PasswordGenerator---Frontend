@@ -14,13 +14,14 @@ function App() {
   const [error, setError] = useState('');
 
   const generatePassword = async () => {
+    // Frontend validation: Check if at least one character set is selected
     if (!includeUppercase && !includeLowercase && !includeNumbers && !includeSymbols) {
       setError('Please select at least one character set.');
       return;
     }
 
     setIsLoading(true);
-    setError('');
+    setError(''); // Clear any previous errors
 
     try {
       const response = await axios.get('http://127.0.0.1:5000/generate-password', {
@@ -34,7 +35,7 @@ function App() {
         },
       });
       setPassword(response.data.Password);
-      setIsCopied(false);
+      setIsCopied(false); // Reset copied state when a new password is generated
     } catch (error) {
       console.error('Error generating password:', error);
       setError('Failed to generate password. Please try again.');
@@ -47,17 +48,19 @@ function App() {
     if (password) {
       navigator.clipboard.writeText(password);
       setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      setTimeout(() => setIsCopied(false), 2000); // Hide the prompt after 2 seconds
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col items-center justify-center p-4">
+      {/* Main Content */}
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg max-w-md w-full border border-gray-700">
         <h1 className="text-3xl font-bold text-center text-white mb-6">
           Password Generator
         </h1>
 
+        {/* Password Length Slider */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-300 mb-2">
             Password Length: <span className="font-semibold text-white">{length}</span>
@@ -72,6 +75,7 @@ function App() {
           />
         </div>
 
+        {/* Include Uppercase Checkbox */}
         <div className="mb-4">
           <label className="flex items-center space-x-2">
             <input
@@ -84,6 +88,7 @@ function App() {
           </label>
         </div>
 
+        {/* Include Lowercase Checkbox */}
         <div className="mb-4">
           <label className="flex items-center space-x-2">
             <input
@@ -96,6 +101,7 @@ function App() {
           </label>
         </div>
 
+        {/* Include Numbers Checkbox */}
         <div className="mb-4">
           <label className="flex items-center space-x-2">
             <input
@@ -108,6 +114,7 @@ function App() {
           </label>
         </div>
 
+        {/* Include Symbols Checkbox */}
         <div className="mb-4">
           <label className="flex items-center space-x-2">
             <input
@@ -120,6 +127,7 @@ function App() {
           </label>
         </div>
 
+        {/* Exclude Similar Characters Checkbox */}
         <div className="mb-6">
           <label className="flex items-center space-x-2">
             <input
@@ -132,12 +140,14 @@ function App() {
           </label>
         </div>
 
+        {/* Error Message */}
         {error && (
           <div className="mb-4 p-3 bg-red-900 border border-red-700 text-red-300 rounded-lg">
             {error}
           </div>
         )}
 
+        {/* Generate Password Button */}
         <button
           onClick={generatePassword}
           disabled={isLoading}
@@ -146,6 +156,7 @@ function App() {
           {isLoading ? 'Generating...' : 'Generate Password'}
         </button>
 
+        {/* Display Generated Password */}
         {password && (
           <div className="mt-6 p-4 bg-gray-700 rounded-lg relative">
             <h2 className="text-lg font-semibold text-gray-300 mb-2">
@@ -154,6 +165,7 @@ function App() {
             <p className="text-xl font-mono text-white break-all">
               {password}
             </p>
+            {/* Copy to Clipboard Button */}
             <button
               onClick={copyToClipboard}
               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-blue-500 transition duration-300"
@@ -177,11 +189,17 @@ function App() {
           </div>
         )}
 
+        {/* Copy Prompt */}
         {isCopied && (
           <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in">
             Copied to clipboard!
           </div>
         )}
+      </div>
+
+      {/* Copyright Section */}
+      <div className="mt-8 text-center text-gray-400 text-sm">
+        &copy; {new Date().getFullYear()} Password Generator. Created by Umeen Rathnayake. All rights reserved.
       </div>
     </div>
   );
