@@ -17,7 +17,7 @@ This is the frontend for the **Password Generator** application, built with **Re
 ## Live Demo
 
 You can access the live version of the app here:
-[Live Demo](https://your-vercel-deployment-url.com)
+[Live Demo](https://password-generator-ten-beryl.vercel.app/)
 
 ---
 
