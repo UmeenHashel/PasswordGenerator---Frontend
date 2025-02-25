@@ -1,81 +1,68 @@
-import { useState } from "react";
-import "./styles.css";
+import React, { useState } from 'react';
+import axios from 'axios';
+import './styles.css';
 
 function App() {
   const [length, setLength] = useState(8);
-  const [numbers, setNumbers] = useState(false);
-  const [symbols, setSymbols] = useState(false);
-  const [password, setPassword] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [includeNumbers, setIncludeNumbers] = useState(false);
+  const [includeSymbols, setIncludeSymbols] = useState(false);
+  const [password, setPassword] = useState('');
 
-  const handleGeneratePassword = async () => {
+  const generatePassword = async () => {
     try {
-      const response = await fetch(
-        `http://127.0.0.1:5000/generate-password?length=${Number(length)}&numbers=${numbers}&symbols=${symbols}`
-      );
-      const data = await response.json();
-      setPassword(data.password);
-      console.log(data);
-      setCopied(false);
+      const response = await axios.get('http://127.0.0.1:5000/generate-password', {
+        params: {
+          length: length,
+          numbers: includeNumbers,
+          symbols: includeSymbols
+        }
+      });
+      setPassword(response.data.Password);
     } catch (error) {
-      console.error("Error fetching password:", error);
-      setPassword("Error fetching password. Please try again.");
+      console.error('Error generating password:', error);
     }
   };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(password)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch((err) => console.error("Error copying to clipboard", err));
-  };
-
   return (
-    <div className="container">
+    <div className="App">
       <h1>Password Generator</h1>
-
-      <label>Password Length: </label>
-      <input
-        type="number"
-        value={length}
-        onChange={(e) => setLength(e.target.value)}
-        min="4"
-        max="50"
-      />
-
       <div>
         <label>
+          Password Length:
           <input
-            type="checkbox"
-            checked={numbers}
-            onChange={() => setNumbers(!numbers)}
+            type="number"
+            value={length}
+            onChange={(e) => setLength(e.target.value)}
+            min="1"
           />
-          Include Numbers
         </label>
       </div>
-
       <div>
         <label>
+          Include Numbers:
           <input
             type="checkbox"
-            checked={symbols}
-            onChange={() => setSymbols(!symbols)}
+            checked={includeNumbers}
+            onChange={(e) => setIncludeNumbers(e.target.checked)}
           />
-          Include Special Symbols
         </label>
       </div>
-
-      <button onClick={handleGeneratePassword}>Generate Password</button>
-
+      <div>
+        <label>
+          Include Symbols:
+          <input
+            type="checkbox"
+            checked={includeSymbols}
+            onChange={(e) => setIncludeSymbols(e.target.checked)}
+          />
+        </label>
+      </div>
+      <button onClick={generatePassword}>Generate Password</button>
       {password && (
-        <div className="password-container">
-        <input type="text" value={password} readOnly className="password-box" placeholder="Generated password will appear here" />
-        <button className="copy-btn" onClick={handleCopy} disabled={!password}>
-          {copied ? "Copied!" : "Copy"}
-        </button>
-      </div>
+        <div>
+          <h2>Your Password:</h2>
+          <p>{password}</p>
+        </div>
       )}
     </div>
   );
